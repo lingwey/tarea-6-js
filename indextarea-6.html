@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo-tarea-6.css"> 
+    <title>tarea 6t</title>
+</head>
+<body>
+    <form id="cantidad-integrantes">
+        <div id="mostrar" class="">
+            <label for="cantidad">ingrese la cantidad de integrantes del grupo familiar</label>
+            <input type="number" id="cantidad">
+            <button type="submit" id="siguiente-paso">siguiente</button>
+        </div>
+
+        <div id="caja-integrantes">
+
+        </div>
+
+        <button type="submit" id="calcular" class="escondido">calcular</button>
+
+        <div id="calculos" class="escondido">
+            <p>El mayor de edad es <b id="mayor-edad"></b></p>
+            <p>el menor de edad es <b id="menor-edad"></b></p>
+            <p>el promedio de edades es <b id="promedio-edad"></b></p>
+        </div>
+        <button type="reset" id="reiniciar">reiniciar</button>
+    </form>
+<script src="interaccion-tarea6.js"></script>
+<script src="calculador.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.escondido{
+    display: none;
+}
+
+.mostrar{
+    display: inline-block;
+    padding:auto;
+    margin: auto;
+    font-family: sans-serif;
+    color: rgb(124, 195, 204);
+    text-align: center;
+}
+
