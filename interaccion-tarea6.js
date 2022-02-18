@@ -1,41 +1,39 @@
-const prueva = 2;
+
 document.querySelector('#siguiente-paso').onclick = function(event){
+     event.preventDefault();
     const cantidadIntegrantes = document.querySelector('#cantidad');
     const grupoFamiliar = Number(cantidadIntegrantes.value);
-    //const grupoFamiliar = prueva;
+    const validarFamilia = validarIngresoFamiliares(grupoFamiliar);
 
-    borrarGrupoFamiliar ();
-    crearGrupoFamiliar(grupoFamiliar);
-    esconderIngreso()
+    const error = {
+       'cantidad-familiares': validarFamilia 
+    }
+    const siguiente = manejarErrores (error) === 0;
 
-    event.preventDefault();
-    console.log ("hiciste click")
-    console.log(cantidadIntegrantes.value)
+    if (siguiente){
+        borrarGrupoFamiliar ();
+        crearGrupoFamiliar(grupoFamiliar);
+        esconderIngreso();
+        limpiarMarcadorErrores();
+    }
 }
 
-// const siguientePaso = document.querySelector('#siguiente-paso')
-
-// siguientePaso.onclick = function(event){
-//     const cantidadIntegrantes = document.querySelector('#cantidad-integrantes');
-//     const grupoFamiliar = Number(cantidadIntegrantes.value);
-
-//     borrarGrupoFamiliar ();
-//     crearGrupoFamiliar(grupoFamiliar);
-//     esconderIngreso()
-
-//     event.preventDefault();
-//     console.log ("hiciste click")
-//     console.log(cantidadIntegrantes.value)
-// }
-
 document.querySelector('#calcular').onclick = function(event){
-    const edadIntegrantes = edadesGrupoFamiliar();
-    mostrarCalculos('mayor',mayorEdad(edadIntegrantes));
-    mostrarCalculos('menor',menorEdad(edadIntegrantes));
-    mostrarCalculos('promedio',promedio(edadIntegrantes));
-    mostrarResultados();
-
     event.preventDefault();
+    const validarEdades = validarEdadesFamilia()
+    const error = {
+        edades: validarEdades
+    }
+    const $calcular = manejarErrores(error) === 0;
+    if ($calcular){
+        const edadIntegrantes = obtenerEdadesGrupoFamiliar();
+        mostrarCalculos('mayor',mayorEdad(edadIntegrantes));
+        mostrarCalculos('menor',menorEdad(edadIntegrantes));
+        mostrarCalculos('promedio',promedio(edadIntegrantes));
+        mostrarResultados();
+        limpiarMarcadorErrores();
+    }
+    
 }
 
 
@@ -45,7 +43,7 @@ document.querySelector('#reiniciar').onclick = reiniciar;
 
 function crearGrupoFamiliar(grupoFamiliar){
     if (grupoFamiliar > 0){
-        mostrarBotonCalculo ();
+        mostrarBotonesResetCalcular();
     } else {
        reiniciar (); 
     }
@@ -68,9 +66,11 @@ function crearIntegrante(integrante){
     $div.className = 'familiar';
 
     const $label = document.createElement('label');
+    $label.className = 'input-group-text'
     $label.textContent = "edad del integrante " + (integrante + 1);
     const $input = document.createElement('input')
     $input.type = 'number'
+    $input.className ='form-control'
 
     $div.appendChild($label);
     $div.appendChild($input);
@@ -81,17 +81,17 @@ function crearIntegrante(integrante){
 
 function reiniciar(){
     borrarGrupoFamiliar();
-    esconderBotonCalculo();
+    esconderBotonesResetCalcular();
     esconderResultado();
     mostrarIngreso();
+    limpiarMarcadorErrores();
 }
 
-function mostrarBotonCalculo(){
-    document.querySelector('#calcular').className = '';
+function esconderBotonesResetCalcular(){
+    document.querySelector('#botones-calcular-resetear').className = 'escondido';
 }
-
-function esconderBotonCalculo(){
-    document.querySelector('#calcular').className = 'escondido'
+function mostrarBotonesResetCalcular(){
+    document.querySelector('#botones-calcular-resetear').className = '';
 }
 
 function mostrarResultados(){
@@ -107,14 +107,14 @@ function esconderIngreso(){
 }
 
 function mostrarIngreso(){
-    document.querySelector('#mostrar').className = '';
+    document.querySelector('#mostrar').className = 'visible';
 }
 
 function mostrarCalculos(tipo, dato){
     document.querySelector(`#${tipo}-edad`).textContent = dato;
 }
 
-function edadesGrupoFamiliar(){
+function obtenerEdadesGrupoFamiliar(){
     const $integrantes = document.querySelectorAll('.familiar input');
     const edades = [];
     for (let i =0; i < $integrantes.length; i++){
@@ -126,3 +126,58 @@ function edadesGrupoFamiliar(){
 }
 
 
+function validarIngresoFamiliares (familia){
+    if (familia === 0){
+        return 'deves ingresar el numero de integrantes familiares';
+    }
+    if (familia < 0){
+        return 'el numero de familiares no puede ser negativo'
+    }
+    if (!/^[0-9]+$/i.test(familia)){
+        return 'solo puedes ingresar numeros enteros'
+    }
+    return ''
+}
+
+function validarEdadesFamilia (){
+    let revisionEdades = obtenerEdadesGrupoFamiliar();
+    for (let i = 0; i < revisionEdades.length; i++){
+        if (revisionEdades[i] === 0){
+            return 'deve ingresar una edad'
+            break
+        }
+        if (revisionEdades[i] < 0){
+            return 'la edad no puede ser menor a 0'
+            break
+        }
+        if (!/^[0-9]+$/i.test(revisionEdades[i])){
+            return 'solo se puede ingresar numeros enteros'
+        }
+    }
+}
+
+function manejarErrores(errores){
+    const llave = Object.keys(errores);
+    const mostrarError = document.querySelector('#mostrar-error')
+    let cantidadErrores = 0;
+
+    llave.forEach(function(llave){
+        const error = errores[llave];
+
+        if (error){
+            cantidadErrores++;
+            $error = document.createElement('li');
+            $error.textContent = error;
+            $error.className = 'error alert alert-danger';
+            mostrarError.appendChild($error);
+        }
+    })
+    return cantidadErrores;
+}
+
+function limpiarMarcadorErrores(){
+    const $errores = document.querySelectorAll('.error')
+    for (let i = 0; i < $errores.length; i++){
+        $errores[i].remove()
+    }
+}
