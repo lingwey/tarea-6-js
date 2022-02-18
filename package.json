@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  },
+  "name": "tarea-6",
+  "version": "1.0.0",
+  "description": "mejora de la tarea 6 con validaciones y bootstrap",
+  "main": "indextarea-6.html",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lingwey/tarea-6-js.git"
+  },
+  "author": "lingwey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lingwey/tarea-6-js/issues"
+  },
+  "homepage": "https://github.com/lingwey/tarea-6-js#readme"
+}
